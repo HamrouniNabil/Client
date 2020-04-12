@@ -1,9 +1,8 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 import authReducer from './authReducer';
 import pitchReducer from './pitchReducer';
 
-
 export default combineReducers({
-    authReducer,
-    pitchReducer
+  authReducer,
+  pitchReducer
 })
