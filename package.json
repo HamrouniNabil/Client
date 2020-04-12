@@ -75,6 +75,7 @@
     "glyphicons-halflings": "^1.9.1",
     "highcharts": "^7.2.0",
     "highcharts-react-official": "^2.2.2",
+    "jwt-decode": "^2.2.0",
     "line-awesome": "github:icons8/line-awesome",
     "moment": "^2.22.2",
     "rc-hammerjs": "^0.6.9",

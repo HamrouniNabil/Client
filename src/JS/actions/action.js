@@ -6,7 +6,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
 } from "../constants/actions-types";
-import axios from "axios";
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 export const register = (user) => async (dispatch) => {
   dispatch({
@@ -31,13 +32,13 @@ export const login = (userCred, role) => async (dispatch) => {
     type: LOGIN_USER,
   });
   try {
-    const loginResult = await axios.post("/login", userCred);
-    localStorage.setItem("token", loginResult.data.token);
-    console.log(loginResult);
-
+    const loginResult = await axios.post('/login', userCred);
+    const decoded = jwt_decode(loginResult.data.token);
+    localStorage.setItem('token', loginResult.data.token);
     dispatch({
       type: LOGIN_SUCCESS,
-    });
+      payload: decoded.id,
+    })
   } catch (error) {
     dispatch({
       type: LOGIN_FAIL,

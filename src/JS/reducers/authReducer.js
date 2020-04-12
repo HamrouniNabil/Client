@@ -6,12 +6,14 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
 } from "../constants/actions-types";
+import jwt_decode from 'jwt-decode';
 
 const initialState = {
   isLoading: false,
   error: [],
-  user: null,
-};
+  user: localStorage.getItem('token') ? true : null,
+  id: localStorage.getItem('token') ? jwt_decode(localStorage.getItem('token')).id : null,
+}
 
 const authReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -48,8 +50,8 @@ const authReducer = (state = initialState, { type, payload }) => {
         ...state,
         isLoading: false,
         user: true,
-      };
-
+        id: payload,
+      }
     default:
       return state;
   }
