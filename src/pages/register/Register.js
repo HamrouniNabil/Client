@@ -25,6 +25,7 @@ class Register extends React.Component {
     name: "",
     password: "",
     phone: "",
+    role: "",
   };
 
   changeHandler = (e) =>
@@ -132,6 +133,20 @@ class Register extends React.Component {
                       onChange={this.changeHandler}
                     />
                   </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="user">User Select </Label>
+                  <Input
+                    type="select"
+                    name="role"
+                    id="exampleSelect"
+                    className="input-transparent pl-3"
+                    onChange={this.changeHandler}
+                  >
+                    <option selected>Choose the user</option>
+                    <option value="User">User</option>
+                    <option value="Agent">Agent</option>
+                  </Input>
                 </FormGroup>
                 <div className="bg-widget-transparent auth-widget-footer">
                   <Button
