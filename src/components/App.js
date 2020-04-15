@@ -15,9 +15,7 @@ import Register from "../pages/register";
 import { logoutUser } from "../JS/actions/user";
 
 const PrivateRoute = ({ dispatch, component, ...rest }) => {
-  if (
-    !Login.isAuthenticated(JSON.parse(localStorage.getItem("authenticated")))
-  ) {
+  if (!Login.isAuthenticated()) {
     dispatch(logoutUser());
     return <Redirect to="/login" />;
   } else {
@@ -53,7 +51,7 @@ class App extends React.PureComponent {
               exact
               render={() => <Redirect to="/app/main" />}
             />
-            <Route
+            <PrivateRoute
               path="/app"
               dispatch={this.props.dispatch}
               component={LayoutComponent}

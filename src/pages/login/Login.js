@@ -24,8 +24,8 @@ class Login extends React.Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  static isAuthenticated(token) {
-    if (token) return true;
+  static isAuthenticated() {
+    return localStorage.getItem("token");
   }
 
   state = {
@@ -55,9 +55,7 @@ class Login extends React.Component {
     }; // eslint-disable-line
 
     // cant access login page while logged in
-    if (
-      Login.isAuthenticated(JSON.parse(localStorage.getItem("authenticated")))
-    ) {
+    if (Login.isAuthenticated()) {
       return <Redirect to={from} />;
     }
     const { isLoading } = this.props;
@@ -66,113 +64,113 @@ class Login extends React.Component {
         <span className="sr-only">Loading...</span>
       </Spinner>
     ) : localStorage.getItem("token") ? (
-      <Redirect to="/dashboard" />
+      <Redirect to={from} />
     ) : (
-          <div
-            className="page-header"
-            style={{
-              backgroundImage: "url(" + require("../../images/Champions.jpg") + ")",
-            }}
-          >
-            <div className="auth-page">
-              <Container>
-                <Widget
-                  className="widget-auth mx-auto"
-                  title={<h3 className="mt-0">Login to your Web App</h3>}
-                >
-                  <p className="widget-auth-info">Use your email to sign in.</p>
-                  <form onSubmit={this.doLogin}>
-                    {this.props.errorMessage && (
-                      <Alert
-                        className="alert-sm widget-middle-overflow rounded-0"
-                        color="danger"
-                      >
-                        {this.props.errorMessage}
-                      </Alert>
-                    )}
-                    <FormGroup className="mt">
-                      <Label for="email">Email</Label>
-                      <InputGroup className="input-group-no-border">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="la la-user text-white" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          id="email"
-                          className="input-transparent pl-3"
-                          type="email"
-                          required
-                          name="email"
-                          placeholder="Email"
-                          onChange={this.handleChange}
-                        />
-                      </InputGroup>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="password">Password</Label>
-                      <InputGroup className="input-group-no-border">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="la la-lock text-white" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          id="password"
-                          className="input-transparent pl-3"
-                          type="password"
-                          required
-                          name="password"
-                          placeholder="Password"
-                          onChange={this.handleChange}
-                        />
-                      </InputGroup>
-                    </FormGroup>
-                    <div className="bg-widget auth-widget-footer">
-                      <Button
-                        type="submit"
-                        color="danger"
-                        className="auth-btn"
-                        size="sm"
-                        style={{ color: "#fff" }}
-                        onClick={this.login}
-                      >
-                        <span
-                          className="auth-btn-circle"
-                          style={{ marginRight: 8 }}
-                        >
-                          <i className="la la-caret-right" />
-                        </span>
-                        {this.props.isFetching ? "Loading..." : "Login"}
-                      </Button>
-                      <p className="widget-auth-info mt-4">
-                        Don't have an account? Sign up now!
+      <div
+        className="page-header"
+        style={{
+          backgroundImage: "url(" + require("../../images/Champions.jpg") + ")",
+        }}
+      >
+        <div className="auth-page">
+          <Container>
+            <Widget
+              className="widget-auth mx-auto"
+              title={<h3 className="mt-0">Login to your Web App</h3>}
+            >
+              <p className="widget-auth-info">Use your email to sign in.</p>
+              <form onSubmit={this.doLogin}>
+                {this.props.errorMessage && (
+                  <Alert
+                    className="alert-sm widget-middle-overflow rounded-0"
+                    color="danger"
+                  >
+                    {this.props.errorMessage}
+                  </Alert>
+                )}
+                <FormGroup className="mt">
+                  <Label for="email">Email</Label>
+                  <InputGroup className="input-group-no-border">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="la la-user text-white" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      id="email"
+                      className="input-transparent pl-3"
+                      type="email"
+                      required
+                      name="email"
+                      placeholder="Email"
+                      onChange={this.handleChange}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="password">Password</Label>
+                  <InputGroup className="input-group-no-border">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="la la-lock text-white" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      id="password"
+                      className="input-transparent pl-3"
+                      type="password"
+                      required
+                      name="password"
+                      placeholder="Password"
+                      onChange={this.handleChange}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <div className="bg-widget auth-widget-footer">
+                  <Button
+                    type="submit"
+                    color="danger"
+                    className="auth-btn"
+                    size="sm"
+                    style={{ color: "#fff" }}
+                    onClick={this.login}
+                  >
+                    <span
+                      className="auth-btn-circle"
+                      style={{ marginRight: 8 }}
+                    >
+                      <i className="la la-caret-right" />
+                    </span>
+                    {this.props.isFetching ? "Loading..." : "Login"}
+                  </Button>
+                  <p className="widget-auth-info mt-4">
+                    Don't have an account? Sign up now!
                   </p>
-                      <Link className="d-block text-center mb-4" to="register">
-                        Create an Account
+                  <Link className="d-block text-center mb-4" to="register">
+                    Create an Account
                   </Link>
-                      <div className="social-buttons">
-                        <Button color="primary" className="social-button">
-                          <i className="social-icon social-google" />
-                          <p className="social-text">GOOGLE</p>
-                        </Button>
-                        <Button color="success" className="social-button">
-                          <i
-                            className="social-icon social-microsoft"
-                            style={{ backgroundImage: `url(${microsoft})` }}
-                          />
-                          <p className="social-text" style={{ color: "#fff" }}>
-                            MICROSOFT
+                  <div className="social-buttons">
+                    <Button color="primary" className="social-button">
+                      <i className="social-icon social-google" />
+                      <p className="social-text">GOOGLE</p>
+                    </Button>
+                    <Button color="success" className="social-button">
+                      <i
+                        className="social-icon social-microsoft"
+                        style={{ backgroundImage: `url(${microsoft})` }}
+                      />
+                      <p className="social-text" style={{ color: "#fff" }}>
+                        MICROSOFT
                       </p>
-                        </Button>
-                      </div>
-                    </div>
-                  </form>
-                </Widget>
-              </Container>
-            </div>
-          </div>
-        );
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </Widget>
+          </Container>
+        </div>
+      </div>
+    );
   }
 }
 
