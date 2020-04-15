@@ -1,21 +1,77 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
-import Login from "../pages/login";
-import Register from "../pages/register";
-import Dashboard from "../pages/dashboard";
+import { connect } from "react-redux";
+import { Switch, Route, Redirect } from "react-router";
+import { HashRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+/* eslint-disable */
+import ErrorPage from "../pages/error";
+/* eslint-enable */
 
 import "../styles/theme.scss";
+import LayoutComponent from "../components/Layout";
+import Login from "../pages/login";
+import Register from "../pages/register";
+import { logoutUser } from "../JS/actions/user";
 
-function App() {
-  return (
-    <div>
-      <BrowserRouter>
-        <Route exact path="/" render={() => <Login />} />
-        <Route exact path="/register" render={() => <Register />} />
-        <Route exact path="/dashboard" render={() => <Dashboard />} />
-      </BrowserRouter>
-    </div>
-  );
+const PrivateRoute = ({ dispatch, component, ...rest }) => {
+  if (
+    !Login.isAuthenticated(JSON.parse(localStorage.getItem("authenticated")))
+  ) {
+    dispatch(logoutUser());
+    return <Redirect to="/login" />;
+  } else {
+    return (
+      // eslint-disable-line
+      <Route
+        {...rest}
+        render={(props) => React.createElement(component, props)}
+      />
+    );
+  }
+};
+
+const CloseButton = ({ closeToast }) => (
+  <i onClick={closeToast} className="la la-close notifications-close" />
+);
+
+class App extends React.PureComponent {
+  render() {
+    console.log(this.props);
+    return (
+      <div>
+        <ToastContainer
+          autoClose={5000}
+          hideProgressBar
+          closeButton={<CloseButton />}
+        />
+        <HashRouter>
+          <Switch>
+            <Route path="/" exact render={() => <Redirect to="/app/main" />} />
+            <Route
+              path="/app"
+              exact
+              render={() => <Redirect to="/app/main" />}
+            />
+            <PrivateRoute
+              path="/app"
+              dispatch={this.props.dispatch}
+              component={LayoutComponent}
+            />
+            <Route path="/register" exact component={Register} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/error" exact component={ErrorPage} />
+            <Route component={ErrorPage} />
+            <Redirect from="*" to="/app/main/dashboard" />
+          </Switch>
+        </HashRouter>
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps)(App);

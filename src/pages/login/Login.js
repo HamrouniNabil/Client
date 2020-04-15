@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import { withRouter, Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../../JS/actions/action";
 import {
@@ -15,12 +16,20 @@ import {
   Spinner,
 } from "reactstrap";
 import Widget from "../../components/Widget";
-import "../Style.css";
+import { loginUser } from "../../JS/actions/user";
 import microsoft from "../../images/microsoft.png";
 
 class Login extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+  };
+
+  static isAuthenticated(token) {
+    if (token) return true;
+  }
+
   state = {
-    name: "",
+    email: "",
     password: "",
   };
 
@@ -36,14 +45,28 @@ class Login extends React.Component {
     this.props.login(this.state);
   };
 
+  signUp() {
+    this.props.history.push("/register");
+  }
+
   render() {
+    const { from } = this.props.location.state || {
+      from: { pathname: "/app" },
+    }; // eslint-disable-line
+
+    // cant access login page while logged in
+    if (
+      Login.isAuthenticated(JSON.parse(localStorage.getItem("authenticated")))
+    ) {
+      return <Redirect to={from} />;
+    }
     const { isLoading } = this.props;
     return isLoading ? (
       <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner>
     ) : localStorage.getItem("token") ? (
-      <Redirect to="/dashboard" />
+      <Redirect to="/" />
     ) : (
       <div
         className="page-header"
@@ -153,8 +176,13 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  isLoading: state.authReducer.isLoading,
-});
+function mapStateToProps(state) {
+  return {
+    isLoading: state.authReducer.isLoading,
+    isFetching: state.auth.isFetching,
+    isAuthenticated: state.auth.isAuthenticated,
+    errorMessage: state.auth.errorMessage,
+  };
+}
 
-export default connect(mapStateToProps, { login })(Login);
+export default withRouter(connect(mapStateToProps, { login })(Login));

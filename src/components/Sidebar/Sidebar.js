@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Progress, Alert } from "reactstrap";
 import { withRouter } from "react-router-dom";
-// import { dismissAlert } from "../../JS/actions/alerts";
+import { dismissAlert } from "../../JS/actions/alerts";
 import s from "./Sidebar.module.scss";
 import LinksGroup from "./LinksGroup";
 
 import { changeActiveSidebarItem } from "../../JS/actions/navigation";
-// import { logoutUser } from "../../JS/actions/alerts";
+import { logoutUser } from "../../JS/actions/user";
 
 class Sidebar extends React.Component {
   static propTypes = {
@@ -27,11 +27,11 @@ class Sidebar extends React.Component {
     activeItem: "",
   };
 
-  //   constructor(props) {
-  //     super(props);
+  constructor(props) {
+    super(props);
 
-  //     this.doLogout = this.doLogout.bind(this);
-  //   }
+    this.doLogout = this.doLogout.bind(this);
+  }
 
   componentDidMount() {
     this.element.addEventListener(
@@ -58,13 +58,13 @@ class Sidebar extends React.Component {
     }
   }
 
-  //   dismissAlert(id) {
-  //     this.props.dispatch(dismissAlert(id));
-  //   }
+  dismissAlert(id) {
+    this.props.dispatch(dismissAlert(id));
+  }
 
-  //   doLogout() {
-  //     this.props.dispatch(logoutUser());
-  //   }
+  doLogout() {
+    this.props.dispatch(logoutUser());
+  }
 
   render() {
     return (
@@ -130,7 +130,7 @@ class Sidebar extends React.Component {
               this.props.dispatch(changeActiveSidebarItem(activeItem))
             }
             activeItem={this.props.activeItem}
-            header="Components"
+            header="Pitchs"
             isHeader
             iconName="flaticon-list"
             link="/app/forms"
