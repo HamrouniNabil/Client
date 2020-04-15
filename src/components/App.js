@@ -53,7 +53,7 @@ class App extends React.PureComponent {
               exact
               render={() => <Redirect to="/app/main" />}
             />
-            <PrivateRoute
+            <Route
               path="/app"
               dispatch={this.props.dispatch}
               component={LayoutComponent}

@@ -53,6 +53,7 @@ class Layout extends React.Component {
   }
 
   render() {
+    console.log('render Layout');
     return (
       <div
         className={[
